@@ -1,18 +1,12 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
-// import { useEffect } from "react";
 import Layout from '../components/Layout';
 
-const IndexPage = (props: any): JSX.Element => {
-    // useEffect(() => {
-    //   const getDog = async () => {
-    //     const response = await fetch("/api/dog");
-    //     const dog = await response.json();
-    //     console.log(dog);
-    //   };
-    //   getDog();
-    // }, []);
+type Dog = {
+    message: string | undefined;
+};
 
+const IndexPage = (props: { dog: Dog }): JSX.Element => {
     return (
         <Layout title="Home | Next.js + TypeScript Example">
             <h1>Hello Florian </h1>
