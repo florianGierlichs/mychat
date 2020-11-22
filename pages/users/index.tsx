@@ -20,7 +20,6 @@ const WithStaticProps = ({ items }: Props): JSX.Element => (
         <List items={items} />
         <p>
             <Link href="/">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a>Go home</a>
             </Link>
         </p>

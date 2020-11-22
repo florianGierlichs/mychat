@@ -9,7 +9,6 @@ type Props = {
 
 const ListItem = ({ data }: Props): JSX.Element => (
     <Link href="/users/[id]" as={`/users/${data.id}`}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a>
             {data.id}: {data.name}
         </a>
