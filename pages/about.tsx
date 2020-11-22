@@ -7,7 +7,6 @@ const AboutPage = (): JSX.Element => (
         <p>This is the about page</p>
         <p>
             <Link href="/">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a>Go home</a>
             </Link>
         </p>

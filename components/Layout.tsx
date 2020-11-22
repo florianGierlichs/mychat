@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';

@@ -12,7 +12,6 @@ const IndexPage = (props: { dog: Dog }): JSX.Element => {
             <h1>Hello Florian </h1>
             <p>
                 <Link href="/about">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a>About</a>
                 </Link>
             </p>
