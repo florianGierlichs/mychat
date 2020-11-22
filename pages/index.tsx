@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import Layout from '../components/Layout';
@@ -6,10 +7,21 @@ type Dog = {
     message: string | undefined;
 };
 
+const MyStyledComponent = styled.div`
+    width: 100px;
+    height: 100px;
+    background-color: lightseagreen;
+`;
+
+const Headline = styled.h1`
+    color: lightslategray;
+`;
+
 const IndexPage = (props: { dog: Dog }): JSX.Element => {
     return (
         <Layout title="Home | Next.js + TypeScript Example">
-            <h1>Hello Florian </h1>
+            <Headline>Hello Florian </Headline>
+            <MyStyledComponent />
             <p>
                 <Link href="/about">
                     <a>About</a>
