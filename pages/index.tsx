@@ -7,21 +7,14 @@ type Dog = {
     message: string | undefined;
 };
 
-const MyStyledComponent = styled.div`
-    width: 100px;
-    height: 100px;
-    background-color: lightseagreen;
-`;
-
 const Headline = styled.h1`
-    color: lightslategray;
+    color: ${(props) => props.color};
 `;
 
 const IndexPage = (props: { dog: Dog }): JSX.Element => {
     return (
-        <Layout title="Home | Next.js + TypeScript Example">
-            <Headline>Hello Florian </Headline>
-            <MyStyledComponent />
+        <Layout title="mychat">
+            <Headline color="red">Hello Florian </Headline>
             <p>
                 <Link href="/about">
                     <a>About</a>
