@@ -9,11 +9,14 @@
     },
     "dependencies": {
         "@emotion/styled": "^11.0.0",
+        "@types/socket.io": "^2.1.11",
         "express": "^4.17.1",
         "next": "latest",
         "react": "^16.14.0",
         "react-dom": "^16.14.0",
-        "react-tsparticles": "^1.18.11"
+        "react-tsparticles": "^1.18.11",
+        "socket.io": "^3.0.3",
+        "socket.io-client": "^3.0.3"
     },
     "devDependencies": {
         "@types/express": "^4.17.8",
