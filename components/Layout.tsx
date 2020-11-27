@@ -53,14 +53,14 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
                             value: '#5ADBBD',
                         },
                         collisions: {
-                            enable: true,
+                            enable: false,
                         },
                         move: {
                             direction: 'none',
                             enable: true,
                             outMode: 'bounce',
                             random: false,
-                            speed: 0.5,
+                            speed: 0.8,
                             straight: false,
                         },
                         number: {
