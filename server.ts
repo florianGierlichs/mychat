@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import next from 'next';
+import { createServer } from 'http';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -7,12 +8,9 @@ const handle = app.getRequestHandler();
 const port = process.env.PORT || 3000;
 const server = express();
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const http = require('http').Server(server);
+const http = createServer(server);
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const io = require('socket.io')(http);
-
-// todo: remove require https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-var-requires.md
 
 const startServer = async () => {
     await app.prepare();
