@@ -24,7 +24,10 @@ const startServer = async () => {
 
     io.on('connection', function (socket: any) {
         console.log('a user connected');
-        socket.emit('message', 'Hallo Welt!!!');
+        socket.emit('onConnection', 'Hallo Welt!!!');
+        socket.on('chatMessage', (chatMessage: string) => {
+            io.emit('getChatMessage', chatMessage);
+        });
     });
 
     server.all('*', (req: Request, res: Response) => {

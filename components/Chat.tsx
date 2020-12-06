@@ -9,7 +9,7 @@ const Container = styled.div`
 
 const UserContainer = styled.div`
     padding: 20px;
-    background-color: #afafaf;
+    background-color: #c4c4c4;
     min-width: 200px;
     border: 1px solid black;
 `;
@@ -21,10 +21,16 @@ const ChatContainer = styled.div`
     min-width: 400px;
 `;
 
+const Headline = styled.h2`
+    margin-bottom: 50px;
+`;
+
 export default function Chat(): JSX.Element {
     return (
         <Container>
-            <UserContainer>user</UserContainer>
+            <UserContainer>
+                <Headline>user</Headline>
+            </UserContainer>
             <ChatContainer>
                 <ChatOutput />
                 <ChatInput />
