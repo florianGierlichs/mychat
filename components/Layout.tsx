@@ -97,7 +97,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
                     <Link href="/users">
                         <a>Users List</a>
                     </Link>{' '}
-                    | <a href="/api/users">Users API</a>
+                    | <a href="/chatroom">chatroom</a>
                 </nav>
             </header>
             {children}
