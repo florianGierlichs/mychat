@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import { io } from 'socket.io-client';
-const socket = io();
 
 const InputForm = styled.form``;
 
@@ -11,10 +9,8 @@ const Input = styled.input`
 
 const Submit = styled.button``;
 
-export default function ChatInput(): JSX.Element {
+export default function ChatInput({ socket }: { socket: any }): JSX.Element {
     const [chatMassage, setChatMessage] = useState('');
-
-    socket.on('onConnection', (message: string) => console.log(message));
 
     function onInputChange(event: any) {
         setChatMessage(event.target.value);

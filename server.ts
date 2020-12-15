@@ -22,9 +22,19 @@ const startServer = async () => {
         return res.status(200).json(data);
     });
 
+    let connectCounter = 0;
     io.on('connection', function (socket: any) {
         console.log('a user connected');
-        socket.emit('onConnection', 'Hallo Welt!!!');
+        connectCounter++;
+        io.emit('user connected/disconnect', connectCounter);
+
+        socket.on('disconnect', () => {
+            connectCounter--;
+            io.emit('user connected/disconnect', connectCounter);
+            console.log('a user disconnected');
+        });
+
+        // chat
         socket.on('chatMessage', (chatMessage: string) => {
             io.emit('getChatMessage', chatMessage);
         });
