@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import next from 'next';
 import { createServer } from 'http';
+import formatMessage from './utils/formatMessage';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -36,7 +37,7 @@ const startServer = async () => {
 
         // chat
         socket.on('chatMessage', (chatMessage: string) => {
-            io.emit('getChatMessage', chatMessage);
+            io.emit('getChatMessage', formatMessage('Foo Bar', chatMessage));
         });
     });
 
