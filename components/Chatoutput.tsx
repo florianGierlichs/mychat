@@ -9,20 +9,28 @@ const Headline = styled.h2`
     margin-bottom: 50px;
 `;
 
+interface Message {
+    username: string;
+    text: string;
+    time: string;
+}
+
 export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
-    const [chatMessages, setChatMessages] = useState(['']);
+    const [chatMessages, setChatMessages] = useState([] as Message[]);
 
     useEffect(() => {
-        socket.on('getChatMessage', (message: string) => {
-            setChatMessages([...chatMessages, message]);
-        });
+        socket.on('getChatMessage', (message: Message) =>
+            setChatMessages([...chatMessages, message])
+        );
     });
 
     return (
         <Output>
             <Headline>Chat</Headline>
-            {chatMessages.map((message: string) => (
-                <div key={message}>{message}</div>
+            {chatMessages.map(({ username, text, time }) => (
+                <div key={time}>
+                    {username} {time} {text}
+                </div>
             ))}
         </Output>
     );
