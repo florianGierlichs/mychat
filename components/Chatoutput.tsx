@@ -19,9 +19,12 @@ export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
     const [chatMessages, setChatMessages] = useState([] as Message[]);
 
     useEffect(() => {
-        socket.on('getChatMessage', (message: Message) =>
-            setChatMessages([...chatMessages, message])
-        );
+        socket.on('getChatMessage', (message: Message) => {
+            setChatMessages([...chatMessages, message]);
+        });
+        return () => {
+            socket.off('getChatMessage');
+        };
     });
 
     return (

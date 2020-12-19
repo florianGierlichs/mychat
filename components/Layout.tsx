@@ -97,14 +97,13 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
                     <Link href="/users">
                         <a>Users List</a>
                     </Link>{' '}
-                    | <a href="/chatroom">chatroom</a>
+                    |{' '}
+                    <Link href="/chatroom">
+                        <a>chatroom</a>
+                    </Link>
                 </nav>
             </header>
             {children}
-            <footer>
-                <hr />
-                <span>Im here to stay (Footer)</span>
-            </footer>
         </div>
     );
 };

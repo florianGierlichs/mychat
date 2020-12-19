@@ -34,11 +34,12 @@ const UserCount = styled.span`
 
 export default function Chat(): JSX.Element {
     const [userCount, setUserCount] = useState(0);
-    useEffect(() => {
-        socket.on('user connected/disconnect', (count: number) => setUserCount(count));
-    });
 
     useEffect(() => {
+        socket.emit('getCount');
+        socket.on('user connected/disconnect', (count: number) => {
+            setUserCount(count);
+        });
         return () => {
             socket.disconnect();
         };
