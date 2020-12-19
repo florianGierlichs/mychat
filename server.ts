@@ -39,6 +39,11 @@ const startServer = async () => {
         socket.on('chatMessage', (chatMessage: string) => {
             io.emit('getChatMessage', formatMessage('Foo Bar', chatMessage));
         });
+
+        socket.on('getCount', () => {
+            console.log('getcount');
+            socket.emit('user connected/disconnect', connectCounter);
+        });
     });
 
     server.all('*', (req: Request, res: Response) => {
