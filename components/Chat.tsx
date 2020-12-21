@@ -37,7 +37,7 @@ export default function Chat(): JSX.Element {
 
     useEffect(() => {
         socket.emit('getCount');
-        socket.on('user connected/disconnect', (count: number) => {
+        socket.on('connectCounter', (count: number) => {
             setUserCount(count);
         });
         return () => {
