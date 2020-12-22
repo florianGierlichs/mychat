@@ -40,11 +40,14 @@ const socket = (http: Server): void => {
                 }
                 console.log('rooms', rooms);
             });
-        });
 
-        // chat
-        socket.on('chatMessage', (chatMessage: string) => {
-            io.emit('getChatMessage', formatMessage('Foo Bar', chatMessage));
+            // chat
+            socket.on('chatMessage', (chatMessage: string) => {
+                io.to(existingRoom?.name).emit(
+                    'getChatMessage',
+                    formatMessage('Foo Bar', chatMessage)
+                );
+            });
         });
     });
 };
