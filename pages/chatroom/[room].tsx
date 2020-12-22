@@ -4,6 +4,8 @@ import Chat from '../../components/Chat';
 import Layout from '../../components/Layout';
 import { Room } from '../../interfaces';
 import { rooms } from '../../utils/rooms';
+import { io } from 'socket.io-client';
+import { useEffect } from 'react';
 
 const Container = styled.div`
     display: flex;
@@ -17,6 +19,18 @@ type Props = {
 };
 
 const ChatroomPage = ({ room, errors }: Props): JSX.Element => {
+    const socket = io();
+
+    useEffect(() => {
+        if (!errors) {
+            socket.emit('joinRoom', room);
+        }
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
     if (errors) {
         return (
             <Layout title="Error | Next.js + TypeScript Example">
@@ -30,7 +44,7 @@ const ChatroomPage = ({ room, errors }: Props): JSX.Element => {
     return (
         <Layout title={room?.name}>
             <Container>
-                <Chat />
+                <Chat socket={socket} />
             </Container>
         </Layout>
     );

@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import ChatInput from './ChatInput';
 import ChatOutput from './Chatoutput';
-import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
-const socket = io();
+import { Room } from '../interfaces';
 
 const Container = styled.div`
     display: flex;
@@ -32,17 +31,18 @@ const UserCount = styled.span`
     margin-left: 50px;
 `;
 
-export default function Chat(): JSX.Element {
+type ChatProps = {
+    socket: any;
+    room?: Room | undefined;
+};
+
+export default function Chat({ socket }: ChatProps): JSX.Element {
     const [userCount, setUserCount] = useState(0);
 
     useEffect(() => {
-        socket.emit('getCount');
         socket.on('connectCounter', (count: number) => {
             setUserCount(count);
         });
-        return () => {
-            socket.disconnect();
-        };
     }, []);
 
     return (
