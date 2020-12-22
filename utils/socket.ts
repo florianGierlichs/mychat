@@ -1,25 +1,45 @@
 import { Server } from 'http';
+import { Room } from '../interfaces';
 import formatMessage from './formatMessage';
 
 const socket = (http: Server): void => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const io = require('socket.io')(http);
 
-    let connectCounter = 0;
+    let rooms: Room[] = [];
     io.on('connection', function (socket: any) {
-        console.log('a user connected');
-        connectCounter++;
-        io.emit('connectCounter', connectCounter);
+        console.log('connection');
+        socket.on('joinRoom', (room: Room) => {
+            socket.join(room.name);
+            console.log(`a user connected in room ${room.name}`);
 
-        socket.on('getCount', () => {
-            console.log('getcount');
-            socket.emit('connectCounter', connectCounter);
-        });
+            let existingRoom = rooms.find((r) => r.name === room.name);
 
-        socket.on('disconnect', () => {
-            connectCounter--;
-            io.emit('connectCounter', connectCounter);
-            console.log('a user disconnected');
+            if (existingRoom) {
+                if (existingRoom.clientCount) {
+                    existingRoom.clientCount = existingRoom.clientCount + 1;
+                }
+            }
+
+            if (!existingRoom) {
+                existingRoom = room;
+                existingRoom.clientCount = 1;
+                rooms.push(existingRoom);
+            }
+
+            io.to(existingRoom.name).emit('connectCounter', existingRoom.clientCount);
+
+            socket.on('disconnect', () => {
+                if (existingRoom?.clientCount) {
+                    existingRoom.clientCount--;
+                }
+                io.to(existingRoom?.name).emit('connectCounter', existingRoom?.clientCount);
+                console.log(`a user disconnected in room ${room.name}`);
+                if (existingRoom?.clientCount === 0) {
+                    rooms = rooms.filter((r) => r.name !== existingRoom?.name);
+                }
+                console.log('rooms', rooms);
+            });
         });
 
         // chat
