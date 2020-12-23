@@ -29,6 +29,8 @@ const socket = (http: Server): void => {
 
             io.to(existingRoom.name).emit('connectCounter', existingRoom.clientCount);
 
+            socket.emit('getChatMessage', formatMessage('Bot', 'Welcome to chat!'));
+
             socket.on('disconnect', () => {
                 if (existingRoom?.clientCount) {
                     existingRoom.clientCount--;
