@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
+import colors from '../../utils/colors';
 
 const Container = styled.div`
     display: flex;
@@ -10,7 +11,7 @@ const Container = styled.div`
     background-color: white;
     max-width: 400px;
     padding: 50px;
-    border: 4px solid #5adbbd;
+    border: 4px solid ${colors.primary};
 `;
 
 const ChooseRoom = styled.h1``;

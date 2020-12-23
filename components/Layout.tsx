@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import Particles from 'react-tsparticles';
+import colors from '../utils/colors';
 
 type Props = {
     children?: ReactNode;
@@ -50,7 +51,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
                     fpsLimit: 60,
                     particles: {
                         color: {
-                            value: '#5ADBBD',
+                            value: colors.primary,
                         },
                         collisions: {
                             enable: false,
@@ -60,7 +61,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
                             enable: true,
                             outMode: 'bounce',
                             random: false,
-                            speed: 0.8,
+                            speed: 0.6,
                             straight: false,
                         },
                         number: {

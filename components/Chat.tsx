@@ -3,6 +3,7 @@ import ChatInput from './ChatInput';
 import ChatOutput from './Chatoutput';
 import { useEffect, useState } from 'react';
 import { Room } from '../interfaces';
+import colors from '../utils/colors';
 
 const Container = styled.div`
     display: flex;
@@ -11,20 +12,20 @@ const Container = styled.div`
 
 const UserContainer = styled.div`
     padding: 20px;
-    background-color: #c4c4c4;
+    background-color: whitesmoke;
     min-width: 200px;
-    border: 1px solid black;
+    border: 1px solid ${colors.black};
 `;
 
 const ChatContainer = styled.div`
     padding: 20px;
     background-color: whitesmoke;
-    border: 1px solid black;
-    min-width: 400px;
+    border: 1px solid ${colors.black};
+    width: 500px;
 `;
 
 const Headline = styled.h2`
-    margin-bottom: 50px;
+    margin: 0 0 10px;
 `;
 
 const UserCount = styled.span`

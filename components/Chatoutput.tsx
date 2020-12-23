@@ -1,12 +1,42 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
+import colors from '../utils/colors';
 
 const Output = styled.div`
-    height: 70vh;
+    padding-bottom: 5px;
 `;
 
 const Headline = styled.h2`
-    margin-bottom: 50px;
+    margin: 0 0 10px;
+`;
+
+const Messages = styled.div`
+    height: 550px;
+    overflow-y: scroll;
+`;
+
+const MessageContainer = styled.div`
+    background-color: ${colors.primary};
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    width: 96%;
+`;
+
+const Username = styled.span`
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 5px;
+`;
+
+const Time = styled.span`
+    font-size: 10px;
+`;
+
+const Text = styled.div`
+    font-size: 18px;
+    margin-top: 2px;
+    overflow-wrap: break-word;
 `;
 
 interface Message {
@@ -30,11 +60,15 @@ export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
     return (
         <Output>
             <Headline>Chat</Headline>
-            {chatMessages.map(({ username, text, time }) => (
-                <div key={time}>
-                    {username} {time} {text}
-                </div>
-            ))}
+            <Messages>
+                {chatMessages.map(({ username, text, time }) => (
+                    <MessageContainer key={time}>
+                        <Username>{username}</Username>
+                        <Time>{time}</Time>
+                        <Text>{text}</Text>
+                    </MessageContainer>
+                ))}
+            </Messages>
         </Output>
     );
 }
