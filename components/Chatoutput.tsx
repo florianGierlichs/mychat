@@ -52,9 +52,6 @@ export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
         socket.on('getChatMessage', (message: Message) => {
             setChatMessages([...chatMessages, message]);
         });
-        return () => {
-            socket.off('getChatMessage');
-        };
     });
 
     return (
