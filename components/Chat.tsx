@@ -32,6 +32,11 @@ const UserCount = styled.span`
     margin-left: 50px;
 `;
 
+const UsersContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 type ChatProps = {
     socket: any;
     room?: Room | undefined;
@@ -39,10 +44,14 @@ type ChatProps = {
 
 export default function Chat({ socket }: ChatProps): JSX.Element {
     const [userCount, setUserCount] = useState(0);
+    const [users, setUsers] = useState([] as string[]);
 
     useEffect(() => {
-        socket.on('connectCounter', (count: number) => {
-            setUserCount(count);
+        socket.on('connectCounter', (room: Room) => {
+            if (room.clientCount && room.users) {
+                setUserCount(room.clientCount);
+                setUsers(room.users);
+            }
         });
     }, []);
 
@@ -52,6 +61,11 @@ export default function Chat({ socket }: ChatProps): JSX.Element {
                 <Headline>
                     Users <UserCount>{userCount}</UserCount>
                 </Headline>
+                <UsersContainer>
+                    {users.map((user) => (
+                        <div key={user}>{user}</div>
+                    ))}
+                </UsersContainer>
             </UserContainer>
             <ChatContainer>
                 <ChatOutput socket={socket} />
