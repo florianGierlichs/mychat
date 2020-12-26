@@ -12,4 +12,5 @@ export type User = {
 export type Room = {
     name: string;
     clientCount?: number;
+    users?: string[];
 };

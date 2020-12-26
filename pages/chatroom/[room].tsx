@@ -23,7 +23,8 @@ const ChatroomPage = ({ room, errors }: Props): JSX.Element => {
 
     useEffect(() => {
         if (!errors) {
-            socket.emit('joinRoom', room);
+            const username = localStorage.getItem('username');
+            socket.emit('joinRoom', { room, username });
         }
 
         return () => {
