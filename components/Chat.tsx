@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import ChatInput from './ChatInput';
 import ChatOutput from './Chatoutput';
 import { useEffect, useState } from 'react';
-import { Room } from '../interfaces';
+import { ChatProps, Room } from '../interfaces';
 import colors from '../utils/colors';
 
 const Container = styled.div`
@@ -48,23 +48,21 @@ const UsersContainer = styled.div`
     flex-direction: column;
 `;
 
-type ChatProps = {
-    socket: any;
-    room?: Room | undefined;
-};
-
-export default function Chat({ socket }: ChatProps): JSX.Element {
+export default function Chat({ socket, username }: ChatProps): JSX.Element {
     const [userCount, setUserCount] = useState(0);
     const [users, setUsers] = useState([] as string[]);
 
     useEffect(() => {
-        socket.on('connectCounter', (room: Room) => {
+        socket?.on('connectCounter', (room: Room) => {
             if (room.clientCount && room.users) {
                 setUserCount(room.clientCount);
                 setUsers(room.users);
             }
         });
-    }, []);
+        return () => {
+            socket?.off('connectCounter');
+        };
+    }, [socket]);
 
     return (
         <Container>
@@ -80,7 +78,7 @@ export default function Chat({ socket }: ChatProps): JSX.Element {
             </UserContainer>
             <ChatContainer>
                 <ChatOutput socket={socket} />
-                <ChatInput socket={socket} />
+                <ChatInput socket={socket} username={username} />
             </ChatContainer>
         </Container>
     );
