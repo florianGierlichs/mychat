@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
+import { ChatProps } from '../interfaces';
 import colors from '../utils/colors';
 
 const Output = styled.div`
@@ -45,17 +46,17 @@ interface Message {
     time: string;
 }
 
-export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
+export default function ChatOutput({ socket }: ChatProps): JSX.Element {
     const [chatMessages, setChatMessages] = useState([] as Message[]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        socket.on('getChatMessage', (message: Message) => {
+        socket?.on('getChatMessage', (message: Message) => {
             setChatMessages([...chatMessages, message]);
         });
         return () => {
             // cleanup is super important here, otherwise the effect is firing exponential times!
-            socket.off('getChatMessage');
+            socket?.off('getChatMessage');
         };
     });
 

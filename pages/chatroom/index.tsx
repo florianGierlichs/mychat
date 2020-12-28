@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import colors from '../../utils/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { checkLocalStorage } from '../../utils/checkLocalStorage';
 
 interface StyledComponentProps {
     nameState: boolean;
@@ -18,6 +19,7 @@ const Container = styled.div<StyledComponentProps>`
     max-width: 400px;
     padding: 50px;
     border: 4px solid ${colors.primary};
+    position: relative;
 `;
 
 const ChooseRoom = styled.h1``;
@@ -52,6 +54,12 @@ const Submit = styled.button`
     padding: 5px;
 `;
 
+const Username = styled.div`
+    position: absolute;
+    top: 5px;
+    left: 5px;
+`;
+
 const Chatroom = (): JSX.Element => {
     const [username, setUsername] = useState('');
     const [nameState, setNameState] = useState(true);
@@ -63,10 +71,18 @@ const Chatroom = (): JSX.Element => {
     function submitUsername(event: { preventDefault: any }) {
         event.preventDefault();
         if (username !== '') {
-            setNameState(false);
             localStorage.setItem('username', username);
+            setNameState(false);
         }
     }
+
+    useEffect(() => {
+        const localStorageUsername = checkLocalStorage();
+        if (localStorageUsername) {
+            setNameState(false);
+            setUsername(localStorageUsername);
+        }
+    }, []);
 
     return (
         <Layout title="chatroom">
@@ -78,17 +94,20 @@ const Chatroom = (): JSX.Element => {
                         <Submit>Submit</Submit>
                     </InputForm>
                 ) : (
-                    <RoomsContainer>
-                        <Link href="/chatroom/usa">
-                            <a>USA</a>
-                        </Link>
-                        <Link href="/chatroom/russia">
-                            <a>Russia</a>
-                        </Link>
-                        <Link href="/chatroom/china">
-                            <a>China</a>
-                        </Link>
-                    </RoomsContainer>
+                    <>
+                        <Username>username: {username}</Username>
+                        <RoomsContainer>
+                            <Link href="/chatroom/usa">
+                                <a>USA</a>
+                            </Link>
+                            <Link href="/chatroom/russia">
+                                <a>Russia</a>
+                            </Link>
+                            <Link href="/chatroom/china">
+                                <a>China</a>
+                            </Link>
+                        </RoomsContainer>
+                    </>
                 )}
             </Container>
         </Layout>

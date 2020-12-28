@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useRef, useState } from 'react';
+import { ChatProps } from '../interfaces';
 
 const InputForm = styled.form`
     display: flex;
@@ -15,8 +16,8 @@ const Submit = styled.button`
     padding: 5px;
 `;
 
-export default function ChatInput({ socket }: { socket: any }): JSX.Element {
-    const [chatMassage, setChatMessage] = useState('');
+export default function ChatInput({ socket, username }: ChatProps): JSX.Element {
+    const [chatMessage, setChatMessage] = useState('');
     const inputEl = useRef<HTMLInputElement>(null);
 
     function onInputChange(event: any) {
@@ -25,8 +26,8 @@ export default function ChatInput({ socket }: { socket: any }): JSX.Element {
 
     function sendMsg(event: { preventDefault: any }) {
         event.preventDefault();
-        if (chatMassage !== '') {
-            socket.emit('chatMessage', chatMassage);
+        if (chatMessage !== '') {
+            socket?.emit('chatMessage', { username, chatMessage });
             setChatMessage('');
             if (inputEl.current !== null) {
                 inputEl.current.focus();
@@ -38,7 +39,7 @@ export default function ChatInput({ socket }: { socket: any }): JSX.Element {
         <InputForm onSubmit={sendMsg}>
             <Input
                 onChange={onInputChange}
-                value={chatMassage}
+                value={chatMessage}
                 ref={inputEl}
                 placeholder="message"
             />

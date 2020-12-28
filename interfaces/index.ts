@@ -14,3 +14,8 @@ export type Room = {
     clientCount?: number;
     users?: string[];
 };
+
+export type ChatProps = {
+    socket: any;
+    username?: string;
+};

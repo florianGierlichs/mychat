@@ -7,6 +7,11 @@ type Props = {
     username: string | null;
 };
 
+type MessageProps = {
+    username: string;
+    chatMessage: string;
+};
+
 const socket = (http: Server): void => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const io = require('socket.io')(http);
@@ -16,7 +21,7 @@ const socket = (http: Server): void => {
         console.log('connection');
         socket.on('joinRoom', ({ room, username }: Props) => {
             socket.join(room.name);
-            console.log(`a user connected in room ${room.name}`);
+            console.log(`${username} connected in room ${room.name}`);
 
             let existingRoom = rooms.find((r) => r.name === room.name);
 
@@ -35,7 +40,7 @@ const socket = (http: Server): void => {
 
             io.to(existingRoom.name).emit('connectCounter', existingRoom);
 
-            socket.emit('getChatMessage', formatMessage('Bot', `${username}, welcome to chat!`));
+            socket.emit('getChatMessage', formatMessage('Bot', `Welcome to the chat!`));
 
             socket.on('disconnect', () => {
                 if (existingRoom?.clientCount) {
@@ -51,10 +56,10 @@ const socket = (http: Server): void => {
             });
 
             // chat
-            socket.on('chatMessage', (chatMessage: string) => {
+            socket.on('chatMessage', ({ username, chatMessage }: MessageProps) => {
                 io.to(existingRoom?.name).emit(
                     'getChatMessage',
-                    formatMessage('Foo Bar', chatMessage)
+                    formatMessage(username, chatMessage)
                 );
             });
         });

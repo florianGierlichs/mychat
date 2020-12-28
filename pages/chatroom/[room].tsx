@@ -5,7 +5,8 @@ import Layout from '../../components/Layout';
 import { Room } from '../../interfaces';
 import { rooms } from '../../utils/rooms';
 import { io } from 'socket.io-client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { checkLocalStorage } from '../../utils/checkLocalStorage';
 
 const Container = styled.div`
     display: flex;
@@ -18,17 +19,27 @@ type Props = {
     errors?: string;
 };
 
-const ChatroomPage = ({ room, errors }: Props): JSX.Element => {
-    const socket = io();
+const ChatRoom = ({ room, errors }: Props): JSX.Element => {
+    const [username, setUsername] = useState('' as string);
+    const [socket, setSocket] = useState(null as any);
 
     useEffect(() => {
         if (!errors) {
-            const username = localStorage.getItem('username');
-            socket.emit('joinRoom', { room, username });
+            const username = checkLocalStorage();
+            if (username) {
+                const socket = io();
+                setSocket(socket);
+                socket.emit('joinRoom', { room, username });
+                setUsername(username);
+            }
         }
 
         return () => {
-            socket.disconnect();
+            // disconnect funktioniert nicht, weil er sich auf socket = null bezieht und nicht den eigentlichen socket aus dem useeffect
+            // io() müsste wieder außerhalb des useeffect. wenn der username vom server und nicht vom localstorage kommt, sollte das funktionieren
+            // weil dann der component nicht rerendern muss (setUsername())
+            // socket als props muss dann überarbeitet werden. zb nicht mehr als dependency im useeffect array
+            socket?.disconnect();
         };
     }, []);
 
@@ -45,13 +56,13 @@ const ChatroomPage = ({ room, errors }: Props): JSX.Element => {
     return (
         <Layout title={room?.name}>
             <Container>
-                <Chat socket={socket} />
+                <Chat socket={socket} username={username} />
             </Container>
         </Layout>
     );
 };
 
-export default ChatroomPage;
+export default ChatRoom;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const paths = rooms.map((room) => ({
