@@ -7,21 +7,32 @@ import colors from '../utils/colors';
 
 const Container = styled.div`
     display: flex;
-    margin: 50px;
+    width: 100%;
+    @media (min-width: 769px) {
+        width: unset;
+        margin: 50px;
+    }
 `;
 
 const UserContainer = styled.div`
-    padding: 20px;
-    background-color: whitesmoke;
-    min-width: 200px;
-    border: 1px solid ${colors.black};
+    display: none;
+    @media (min-width: 769px) {
+        display: block;
+        padding: 20px;
+        background-color: whitesmoke;
+        min-width: 200px;
+        border: 1px solid ${colors.black};
+    }
 `;
 
 const ChatContainer = styled.div`
     padding: 20px;
     background-color: whitesmoke;
     border: 1px solid ${colors.black};
-    width: 500px;
+    width: 100%;
+    @media (min-width: 769px) {
+        width: 500px;
+    }
 `;
 
 const Headline = styled.h2`
