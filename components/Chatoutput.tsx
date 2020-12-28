@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import colors from '../utils/colors';
 
 const Output = styled.div`
@@ -47,12 +47,21 @@ interface Message {
 
 export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
     const [chatMessages, setChatMessages] = useState([] as Message[]);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         socket.on('getChatMessage', (message: Message) => {
             setChatMessages([...chatMessages, message]);
         });
+        return () => {
+            // cleanup is super important here, otherwise the effect is firing exponential times!
+            socket.off('getChatMessage');
+        };
     });
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [chatMessages]);
 
     return (
         <Output>
@@ -65,6 +74,7 @@ export default function ChatOutput({ socket }: { socket: any }): JSX.Element {
                         <Text>{text}</Text>
                     </MessageContainer>
                 ))}
+                <div ref={messagesEndRef} />
             </Messages>
         </Output>
     );
