@@ -7,11 +7,17 @@ type Dog = {
     message: string | undefined;
 };
 
+type Users = {
+    username: string;
+    password: string;
+};
+
 const Headline = styled.h1`
     color: ${(props) => props.color};
 `;
 
-const IndexPage = (props: { dog: Dog }): JSX.Element => {
+const IndexPage = (props: { dog: Dog; users: Users[] }): JSX.Element => {
+    console.log('users in component', props.users);
     return (
         <Layout title="mychat">
             <Headline color="red">Hello Florian </Headline>
@@ -21,6 +27,9 @@ const IndexPage = (props: { dog: Dog }): JSX.Element => {
                 </Link>
             </p>
             <img src={props?.dog?.message} alt="" />
+            {props.users.map((user) => (
+                <div key={user.username}>{user.username}</div>
+            ))}
         </Layout>
     );
 };
@@ -32,7 +41,14 @@ export const getStaticProps: GetStaticProps = async () => {
 
     const response = await fetch('http://localhost:3000/api/dog');
     const dog = await response.json();
-    return { props: { dog } };
+
+    const usersResponse = await fetch('http://localhost:3000/api/users');
+    const users = await usersResponse.json();
+
+    const singleUserResponse = await fetch('http://localhost:3000/api/users/zweiter user');
+    const user = await singleUserResponse.json();
+    console.log('single user: ', user);
+    return { props: { dog, users } };
 };
 
 export default IndexPage;
