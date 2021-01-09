@@ -19,3 +19,9 @@ export type ChatProps = {
     socket: any;
     username?: string;
 };
+
+export type ExistingUser = {
+    _id: string;
+    username: string;
+    password: string;
+};
