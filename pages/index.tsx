@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
+// import { useEffect } from 'react';
 import Layout from '../components/Layout';
 
 type Dog = {
@@ -17,7 +18,50 @@ const Headline = styled.h1`
 `;
 
 const IndexPage = (props: { dog: Dog; users: Users[] }): JSX.Element => {
-    console.log('users in component', props.users);
+    // useEffect(() => {
+    //     console.log('hallo');
+    //     const test = async () => {
+    //         console.log('test');
+    //         const signUpResponse = await fetch(`/api/users/signup`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 username: 'relativeURL',
+    //                 password: 'relativeURL',
+    //             }),
+    //         });
+    //         if (signUpResponse.status !== 200) {
+    //             const error = await signUpResponse.json();
+    //             throw new Error(error.message);
+    //         }
+    //     };
+    //     test();
+    // }, []);
+
+    // useEffect(() => {
+    //     const test = async () => {
+    //         console.log('test');
+    //         const signUpResponse = await fetch(`/api/users/login`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 username: 'relativeURL',
+    //                 password: 'relativeURL',
+    //             }),
+    //         });
+    //         console.log('signUpResponse', signUpResponse);
+    //         if (signUpResponse.status !== 200) {
+    //             const error = await signUpResponse.json();
+    //             throw new Error(error.message);
+    //         }
+    //     };
+    //     test();
+    // }, []);
+
     return (
         <Layout title="mychat">
             <Headline color="red">Hello Florian </Headline>
@@ -45,9 +89,6 @@ export const getStaticProps: GetStaticProps = async () => {
     const usersResponse = await fetch('http://localhost:3000/api/users');
     const users = await usersResponse.json();
 
-    const singleUserResponse = await fetch('http://localhost:3000/api/users/zweiter user');
-    const user = await singleUserResponse.json();
-    console.log('single user: ', user);
     return { props: { dog, users } };
 };
 

@@ -1,11 +1,16 @@
 import express from 'express';
+import { ExistingUser } from '../../interfaces';
 import User from '../models/User';
 
 const router = express.Router();
 
+//
+// -- get --
+//
+
 router.get('/', async (_, res) => {
     try {
-        const users = await User.find({});
+        const users: ExistingUser[] | null = await User.find({});
         res.send(users);
     } catch (error) {
         res.send(error);
@@ -17,7 +22,7 @@ router.get('/:username', async (req, res) => {
     const username = req.params.username;
 
     try {
-        const existingUser = await User.findOne({
+        const existingUser: ExistingUser | null = await User.findOne({
             username: username,
         });
         res.send(existingUser);
@@ -27,17 +32,21 @@ router.get('/:username', async (req, res) => {
     }
 });
 
-router.post('/signup', async (request, response) => {
+//
+// -- post --
+//
+
+router.post('/signup', async (req, res) => {
     const {
         body: { username, password },
-    } = request;
+    } = req;
     try {
-        const existingUser = await User.findOne({
+        const existingUser: ExistingUser | null = await User.findOne({
             username: username,
         });
 
         if (existingUser) {
-            return response.status(400).send({ message: `Username already exists.` });
+            return res.status(400).send({ message: `Username already exists.` });
         }
 
         const newUser = new User({
@@ -46,9 +55,32 @@ router.post('/signup', async (request, response) => {
         });
 
         await newUser.save();
-        response.status(200).send();
+        res.status(200).send();
     } catch (error) {
-        response.status(500).send({ error: error });
+        res.status(500).send({ error: error });
+    }
+});
+
+router.post('/login', async (req, res) => {
+    const {
+        body: { username, password },
+    } = req;
+    try {
+        const existingUser: ExistingUser | null = await User.findOne({
+            username: username,
+        });
+
+        if (!existingUser) {
+            return res.status(404).send({ message: `Username doesn't exist` });
+        }
+
+        if (existingUser.password !== password) {
+            return res.status(401).send({ message: `Wrong password` });
+        }
+
+        res.status(200).json();
+    } catch (error) {
+        res.status(500).json({ error: error });
     }
 });
 
