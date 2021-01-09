@@ -70,8 +70,8 @@ const IndexPage = (props: { dog: Dog; users: Users[] }): JSX.Element => {
                     <a>About</a>
                 </Link>
             </p>
-            <img src={props?.dog?.message} alt="" />
-            {props.users.map((user) => (
+            <img src={props.dog?.message} alt="" />
+            {props.users?.map((user) => (
                 <div key={user.username}>{user.username}</div>
             ))}
         </Layout>
