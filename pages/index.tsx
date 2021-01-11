@@ -89,7 +89,7 @@ export const getStaticProps: GetStaticProps = async () => {
     const usersResponse = await fetch('http://localhost:3000/api/users');
     const users = await usersResponse.json();
 
-    return { props: { dog, users } };
+    return { props: { dog, users }, revalidate: 1 };
 };
 
 export default IndexPage;
