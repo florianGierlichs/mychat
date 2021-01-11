@@ -13,11 +13,16 @@ type Users = {
     password: string;
 };
 
+type PageProps = {
+    dog: Dog;
+    users: Users[];
+};
+
 const Headline = styled.h1`
     color: ${(props) => props.color};
 `;
 
-const IndexPage = (props: { dog: Dog; users: Users[] }): JSX.Element => {
+const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
     // useEffect(() => {
     //     console.log('hallo');
     //     const test = async () => {
@@ -70,8 +75,8 @@ const IndexPage = (props: { dog: Dog; users: Users[] }): JSX.Element => {
                     <a>About</a>
                 </Link>
             </p>
-            <img src={props.dog?.message} alt="" />
-            {props.users?.map((user) => (
+            <img src={dog?.message} alt="" />
+            {users?.map((user) => (
                 <div key={user.username}>{user.username}</div>
             ))}
         </Layout>
