@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 import Link from 'next/link';
 // import { useEffect } from 'react';
 import Layout from '../components/Layout';
+import Image from 'next/image';
 
 type Dog = {
     message: string | undefined;
@@ -20,6 +21,12 @@ type PageProps = {
 
 const Headline = styled.h1`
     color: ${(props) => props.color};
+`;
+
+const ImageWrapper = styled.div`
+    max-width: 500px;
+    height: 500px;
+    position: relative;
 `;
 
 const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
@@ -75,7 +82,16 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
                     <a>About</a>
                 </Link>
             </p>
-            <img src={dog?.message} alt="" />
+            {dog.message && (
+                <ImageWrapper>
+                    <Image
+                        src={dog?.message}
+                        alt="Random picture of a dog"
+                        layout="fill"
+                        objectFit="contain"
+                    />
+                </ImageWrapper>
+            )}
             {users?.map((user) => (
                 <div key={user.username}>{user.username}</div>
             ))}
