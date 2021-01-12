@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
-import Link from 'next/link';
 // import { useEffect } from 'react';
 import Layout from '../components/Layout';
 import Image from 'next/image';
@@ -31,9 +30,7 @@ const ImageWrapper = styled.div`
 
 const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
     // useEffect(() => {
-    //     console.log('hallo');
     //     const test = async () => {
-    //         console.log('test');
     //         const signUpResponse = await fetch(`/api/users/signup`, {
     //             method: 'POST',
     //             headers: {
@@ -54,7 +51,6 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
 
     // useEffect(() => {
     //     const test = async () => {
-    //         console.log('test');
     //         const signUpResponse = await fetch(`/api/users/login`, {
     //             method: 'POST',
     //             headers: {
@@ -65,7 +61,6 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
     //                 password: 'relativeURL',
     //             }),
     //         });
-    //         console.log('signUpResponse', signUpResponse);
     //         if (signUpResponse.status !== 200) {
     //             const error = await signUpResponse.json();
     //             throw new Error(error.message);
@@ -77,11 +72,6 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
     return (
         <Layout title="mychat">
             <Headline color="red">Hello Florian </Headline>
-            <p>
-                <Link href="/about">
-                    <a>About</a>
-                </Link>
-            </p>
             {dog.message && (
                 <ImageWrapper>
                     <Image
