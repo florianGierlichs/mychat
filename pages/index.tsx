@@ -100,10 +100,6 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-    // Example for including static props in a Next.js function component page.
-    // Don't forget to include the respective types for any props passed into
-    // the component.
-
     const response = await fetch('http://localhost:3000/api/dog');
     const dog = await response.json();
 

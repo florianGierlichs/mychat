@@ -27,9 +27,6 @@ const WithStaticProps = ({ items }: Props): JSX.Element => (
 );
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    // Example for including static props in a Next.js function component page.
-    // Don't forget to include the respective types for any props passed into
-    // the component.
     const items: User[] = sampleUserData;
     return { props: { items } };
 };
