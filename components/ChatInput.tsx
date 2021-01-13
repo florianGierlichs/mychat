@@ -1,15 +1,11 @@
 import styled from '@emotion/styled';
 import { useRef, useState } from 'react';
 import { ChatProps } from '../interfaces';
+import Input from './Input';
 
 const InputForm = styled.form`
     display: flex;
     justify-content: space-between;
-`;
-
-const Input = styled.input`
-    width: -webkit-fill-available;
-    padding: 5px;
 `;
 
 const Submit = styled.button`

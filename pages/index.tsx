@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 // import { useEffect } from 'react';
 import Layout from '../components/Layout';
 import Image from 'next/image';
+import AuthenticationForm from '../components/AuthenticationForm';
 
 type Dog = {
     message: string | undefined;
@@ -72,6 +73,7 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
     return (
         <Layout title="mychat">
             <Headline color="red">Hello Florian </Headline>
+            <AuthenticationForm />
             {dog.message && (
                 <ImageWrapper>
                     <Image
