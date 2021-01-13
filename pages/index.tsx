@@ -77,7 +77,7 @@ const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
             {dog.message && (
                 <ImageWrapper>
                     <Image
-                        src={dog?.message}
+                        src={dog.message}
                         alt="Random picture of a dog"
                         layout="fill"
                         objectFit="contain"
