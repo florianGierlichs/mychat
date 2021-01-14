@@ -5,7 +5,7 @@ interface InputSizes {
 }
 
 interface InputProps {
-    fieldSize: string;
+    fieldSize?: string;
 }
 
 const inputSizes: InputSizes = {
