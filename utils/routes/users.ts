@@ -57,7 +57,7 @@ router.post('/signup', async (req, res) => {
         await newUser.save();
         res.status(200).send();
     } catch (error) {
-        res.status(500).send({ error: error });
+        res.status(500).send(error);
     }
 });
 
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
 
         res.status(200).json();
     } catch (error) {
-        res.status(500).json({ error: error });
+        res.status(500).json(error);
     }
 });
 
