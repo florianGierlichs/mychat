@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import colors from '../utils/colors';
 import Input from './Input';
 import { useRef, useState } from 'react';
+import AuthenticationError from './AuthenticationError';
 
 const Form = styled.form`
     margin: 100px auto;
@@ -76,32 +77,52 @@ const AuthenticationForm: NextPage = () => {
     const [formType, setFormType] = useState('login');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const refIpunt = useRef<HTMLInputElement>(null);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [confirmPasswordMatch, setConfirmPasswordMatch] = useState(true);
+    const refInput = useRef<HTMLInputElement>(null);
 
-    const onUsernameChange = (event: React.FormEvent<HTMLInputElement>) => {
-        setUsername(event.currentTarget.value);
-    };
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        const {
+            target: { value, id },
+        } = event;
 
-    const onPasswordChange = (event: React.FormEvent<HTMLInputElement>) => {
-        setPassword(event.currentTarget.value);
+        switch (id) {
+            case 'username':
+                setUsername(value);
+                break;
+            case 'password':
+                setPassword(value);
+                break;
+            case 'confirmPassword':
+                setConfirmPassword(value);
+                break;
+        }
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (formType === 'signup') {
+            if (password !== confirmPassword) {
+                setConfirmPasswordMatch(false);
+            }
+        }
     };
 
     const handleSwitchFormular = () => {
         setUsername('');
         setPassword('');
+        setConfirmPassword('');
 
         if (formType === 'login') {
             setFormType('signup');
+            setConfirmPasswordMatch(true);
         }
         if (formType === 'signup') {
             setFormType('login');
         }
 
-        refIpunt.current?.focus();
+        refInput.current?.focus();
     };
 
     return (
@@ -112,8 +133,8 @@ const AuthenticationForm: NextPage = () => {
                 fieldSize="small"
                 placeholder="Username"
                 value={username}
-                onChange={onUsernameChange}
-                ref={refIpunt}
+                onChange={handleInputChange}
+                ref={refInput}
             />
             <label htmlFor="password">Password</label>
             <Input
@@ -122,7 +143,7 @@ const AuthenticationForm: NextPage = () => {
                 placeholder="Password"
                 type="password"
                 value={password}
-                onChange={onPasswordChange}
+                onChange={handleInputChange}
             />
             {formType === 'signup' && (
                 <>
@@ -132,9 +153,14 @@ const AuthenticationForm: NextPage = () => {
                         fieldSize="small"
                         placeholder="Password"
                         type="password"
-                        value={password}
-                        onChange={onPasswordChange}
+                        value={confirmPassword}
+                        onChange={handleInputChange}
                     />
+                    {!confirmPasswordMatch && (
+                        <>
+                            <AuthenticationError message="Confirmed Password does not match!" />
+                        </>
+                    )}
                 </>
             )}
             <ButtonContainer>
