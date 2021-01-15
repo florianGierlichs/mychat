@@ -4,6 +4,7 @@ import colors from '../utils/colors';
 import Input from './Input';
 import { useRef, useState } from 'react';
 import AuthenticationError from './AuthenticationError';
+import { useRouter } from 'next/router';
 
 const Form = styled.form`
     margin: 100px auto;
@@ -78,8 +79,11 @@ const AuthenticationForm: NextPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [confirmPasswordMatch, setConfirmPasswordMatch] = useState(true);
+    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+    const [emptyInputError, setEmptyInputError] = useState(false);
+    const [usernameExistError, setUsernameExistError] = useState(false);
     const refInput = useRef<HTMLInputElement>(null);
+    const router = useRouter();
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const {
@@ -99,13 +103,46 @@ const AuthenticationForm: NextPage = () => {
         }
     };
 
+    const signUp = async (username: string, password: string): Promise<void> => {
+        try {
+            const signUpResponse = await fetch(`/api/users/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+            });
+            if (signUpResponse.status !== 200) {
+                const error = await signUpResponse.json();
+                throw new Error(error.message);
+            }
+            // here probably set JWT token
+            router.push('/chatroom');
+        } catch (error) {
+            console.log(error.message);
+            setUsernameExistError(true);
+        }
+    };
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (formType === 'signup') {
-            if (password !== confirmPassword) {
-                setConfirmPasswordMatch(false);
+            setConfirmPasswordError(false);
+            setEmptyInputError(false);
+            setUsernameExistError(false);
+            if (username === '' || password === '' || confirmPassword === '') {
+                setEmptyInputError(true);
+                return;
             }
+            if (password !== confirmPassword) {
+                setConfirmPasswordError(true);
+                return;
+            }
+            signUp(username, password);
         }
     };
 
@@ -113,10 +150,12 @@ const AuthenticationForm: NextPage = () => {
         setUsername('');
         setPassword('');
         setConfirmPassword('');
+        setConfirmPasswordError(false);
+        setEmptyInputError(false);
+        setUsernameExistError(false);
 
         if (formType === 'login') {
             setFormType('signup');
-            setConfirmPasswordMatch(true);
         }
         if (formType === 'signup') {
             setFormType('login');
@@ -156,9 +195,19 @@ const AuthenticationForm: NextPage = () => {
                         value={confirmPassword}
                         onChange={handleInputChange}
                     />
-                    {!confirmPasswordMatch && (
+                    {emptyInputError && (
+                        <>
+                            <AuthenticationError message="Please provide username, password and password confirmation!" />
+                        </>
+                    )}
+                    {confirmPasswordError && (
                         <>
                             <AuthenticationError message="Confirmed Password does not match!" />
+                        </>
+                    )}
+                    {usernameExistError && (
+                        <>
+                            <AuthenticationError message="Username already exists!" />
                         </>
                     )}
                 </>
@@ -169,7 +218,7 @@ const AuthenticationForm: NextPage = () => {
             <SwitchFormularContainer>
                 {formTypes[formType].switchFormQuestion}
                 <br />
-                <SwitchFormularButton onClick={handleSwitchFormular}>
+                <SwitchFormularButton type="button" onClick={handleSwitchFormular}>
                     {formTypes[formType].switchFormAnswer}
                 </SwitchFormularButton>
             </SwitchFormularContainer>

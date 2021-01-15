@@ -13,7 +13,7 @@ interface Props {
 }
 
 const AuthenticationError: NextPage<Props> = ({ message }) => {
-    return <ErrorMessage>{message}</ErrorMessage>;
+    return <ErrorMessage role="alert">{message}</ErrorMessage>;
 };
 
 export default AuthenticationError;
