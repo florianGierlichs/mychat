@@ -79,9 +79,7 @@ const AuthenticationForm: NextPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-    const [emptyInputError, setEmptyInputError] = useState(false);
-    const [serverResponseError, setServerResponseError] = useState('');
+    const [error, setError] = useState('');
     const refInput = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
@@ -123,7 +121,7 @@ const AuthenticationForm: NextPage = () => {
             router.push('/chatroom');
         } catch (error) {
             console.log(error.message);
-            setServerResponseError(error.message);
+            setError(error.message);
         }
     };
 
@@ -147,7 +145,7 @@ const AuthenticationForm: NextPage = () => {
             router.push('/chatroom');
         } catch (error) {
             console.log(error.message);
-            setServerResponseError(error.message);
+            setError(error.message);
         }
     };
 
@@ -155,24 +153,22 @@ const AuthenticationForm: NextPage = () => {
         event.preventDefault();
 
         if (formType === 'signup') {
-            setConfirmPasswordError(false);
-            setEmptyInputError(false);
-            setServerResponseError('');
+            setError('');
             if (username === '' || password === '' || confirmPassword === '') {
-                setEmptyInputError(true);
+                setError('Please provide username, password and password confirmation!');
                 return;
             }
             if (password !== confirmPassword) {
-                setConfirmPasswordError(true);
+                setError('Confirmed Password does not match!');
                 return;
             }
             signUp();
         }
 
         if (formType === 'login') {
-            setEmptyInputError(false);
+            setError('');
             if (username === '' || password === '') {
-                setEmptyInputError(true);
+                setError('Please provide username, password and password confirmation!');
                 return;
             }
             logIn();
@@ -183,9 +179,7 @@ const AuthenticationForm: NextPage = () => {
         setUsername('');
         setPassword('');
         setConfirmPassword('');
-        setConfirmPasswordError(false);
-        setEmptyInputError(false);
-        setServerResponseError('');
+        setError('');
 
         if (formType === 'login') {
             setFormType('signup');
@@ -228,21 +222,11 @@ const AuthenticationForm: NextPage = () => {
                         value={confirmPassword}
                         onChange={handleInputChange}
                     />
-                    {confirmPasswordError && (
-                        <>
-                            <AuthenticationError message="Confirmed Password does not match!" />
-                        </>
-                    )}
                 </>
             )}
-            {serverResponseError !== '' && (
+            {error !== '' && (
                 <>
-                    <AuthenticationError message={serverResponseError} />
-                </>
-            )}
-            {emptyInputError && (
-                <>
-                    <AuthenticationError message="Please provide username, password and password confirmation!" />
+                    <AuthenticationError message={error} />
                 </>
             )}
             <ButtonContainer>
