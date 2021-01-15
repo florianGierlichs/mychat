@@ -81,7 +81,7 @@ const AuthenticationForm: NextPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
     const [emptyInputError, setEmptyInputError] = useState(false);
-    const [usernameExistError, setUsernameExistError] = useState(false);
+    const [serverResponseError, setServerResponseError] = useState('');
     const refInput = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
@@ -103,7 +103,7 @@ const AuthenticationForm: NextPage = () => {
         }
     };
 
-    const signUp = async (username: string, password: string): Promise<void> => {
+    const signUp = async (): Promise<void> => {
         try {
             const signUpResponse = await fetch(`/api/users/signup`, {
                 method: 'POST',
@@ -123,7 +123,31 @@ const AuthenticationForm: NextPage = () => {
             router.push('/chatroom');
         } catch (error) {
             console.log(error.message);
-            setUsernameExistError(true);
+            setServerResponseError(error.message);
+        }
+    };
+
+    const logIn = async (): Promise<void> => {
+        try {
+            const signUpResponse = await fetch(`/api/users/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+            });
+            if (signUpResponse.status !== 200) {
+                const error = await signUpResponse.json();
+                throw new Error(error.message);
+            }
+            // here probably set JWT token
+            router.push('/chatroom');
+        } catch (error) {
+            console.log(error.message);
+            setServerResponseError(error.message);
         }
     };
 
@@ -133,7 +157,7 @@ const AuthenticationForm: NextPage = () => {
         if (formType === 'signup') {
             setConfirmPasswordError(false);
             setEmptyInputError(false);
-            setUsernameExistError(false);
+            setServerResponseError('');
             if (username === '' || password === '' || confirmPassword === '') {
                 setEmptyInputError(true);
                 return;
@@ -142,7 +166,16 @@ const AuthenticationForm: NextPage = () => {
                 setConfirmPasswordError(true);
                 return;
             }
-            signUp(username, password);
+            signUp();
+        }
+
+        if (formType === 'login') {
+            setEmptyInputError(false);
+            if (username === '' || password === '') {
+                setEmptyInputError(true);
+                return;
+            }
+            logIn();
         }
     };
 
@@ -152,7 +185,7 @@ const AuthenticationForm: NextPage = () => {
         setConfirmPassword('');
         setConfirmPasswordError(false);
         setEmptyInputError(false);
-        setUsernameExistError(false);
+        setServerResponseError('');
 
         if (formType === 'login') {
             setFormType('signup');
@@ -195,21 +228,21 @@ const AuthenticationForm: NextPage = () => {
                         value={confirmPassword}
                         onChange={handleInputChange}
                     />
-                    {emptyInputError && (
-                        <>
-                            <AuthenticationError message="Please provide username, password and password confirmation!" />
-                        </>
-                    )}
                     {confirmPasswordError && (
                         <>
                             <AuthenticationError message="Confirmed Password does not match!" />
                         </>
                     )}
-                    {usernameExistError && (
-                        <>
-                            <AuthenticationError message="Username already exists!" />
-                        </>
-                    )}
+                </>
+            )}
+            {serverResponseError !== '' && (
+                <>
+                    <AuthenticationError message={serverResponseError} />
+                </>
+            )}
+            {emptyInputError && (
+                <>
+                    <AuthenticationError message="Please provide username, password and password confirmation!" />
                 </>
             )}
             <ButtonContainer>
