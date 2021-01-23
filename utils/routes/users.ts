@@ -1,6 +1,7 @@
 import express from 'express';
 import { ExistingUser } from '../../interfaces';
 import User from '../models/User';
+import { hash, compare } from 'bcrypt';
 
 const router = express.Router();
 
@@ -40,6 +41,7 @@ router.post('/signup', async (req, res) => {
     const {
         body: { username, password },
     } = req;
+
     try {
         const existingUser: ExistingUser | null = await User.findOne({
             username: username,
@@ -49,13 +51,15 @@ router.post('/signup', async (req, res) => {
             return res.status(400).send({ message: `Username already exists.` });
         }
 
-        const newUser = new User({
-            username: username,
-            password: password,
-        });
+        hash(password, 10, async function (_err, hash: string) {
+            const newUser = new User({
+                username: username,
+                password: hash,
+            });
 
-        await newUser.save();
-        res.status(200).send();
+            await newUser.save();
+            res.status(200).send();
+        });
     } catch (error) {
         res.status(500).send(error);
     }
@@ -65,6 +69,7 @@ router.post('/login', async (req, res) => {
     const {
         body: { username, password },
     } = req;
+
     try {
         const existingUser: ExistingUser | null = await User.findOne({
             username: username,
@@ -74,11 +79,12 @@ router.post('/login', async (req, res) => {
             return res.status(404).send({ message: `Username doesn't exist` });
         }
 
-        if (existingUser.password !== password) {
-            return res.status(401).send({ message: `Wrong password` });
-        }
-
-        res.status(200).json();
+        compare(password, existingUser.password, function (_err, result) {
+            if (!result) {
+                return res.status(401).send({ message: `Wrong password` });
+            }
+            res.status(200).json();
+        });
     } catch (error) {
         res.status(500).json(error);
     }
