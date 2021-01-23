@@ -27,21 +27,19 @@ const ChatRoom = ({ room, errors }: Props): JSX.Element => {
         if (!errors) {
             const username = checkLocalStorage();
             if (username) {
-                const socket = io();
-                setSocket(socket);
-                socket.emit('joinRoom', { room, username });
+                const socketConnection = io();
+                setSocket(socketConnection);
                 setUsername(username);
             }
         }
+    }, []);
 
+    useEffect(() => {
+        socket?.emit('joinRoom', { room, username });
         return () => {
-            // disconnect funktioniert nicht, weil er sich auf socket = null bezieht und nicht den eigentlichen socket aus dem useeffect
-            // io() müsste wieder außerhalb des useeffect. wenn der username vom server und nicht vom localstorage kommt, sollte das funktionieren
-            // weil dann der component nicht rerendern muss (setUsername())
-            // socket als props muss dann überarbeitet werden. zb nicht mehr als dependency im useeffect array
             socket?.disconnect();
         };
-    }, []);
+    }, [socket]);
 
     if (errors) {
         return (

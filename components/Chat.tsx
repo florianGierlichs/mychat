@@ -64,6 +64,10 @@ export default function Chat({ socket, username }: ChatProps): JSX.Element {
         };
     }, [socket]);
 
+    if (!socket) {
+        return <div>No Socket!</div>;
+    }
+
     return (
         <Container>
             <UserContainer>
