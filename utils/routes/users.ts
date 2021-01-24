@@ -76,12 +76,12 @@ router.post('/login', async (req, res) => {
         });
 
         if (!existingUser) {
-            return res.status(404).send({ message: `Username doesn't exist` });
+            return res.status(401).send({ message: `Username or password is wrong!` });
         }
 
         compare(password, existingUser.password, function (_err, result) {
             if (!result) {
-                return res.status(401).send({ message: `Wrong password` });
+                return res.status(401).send({ message: `Username or password is wrong!` });
             }
             res.status(200).json();
         });
