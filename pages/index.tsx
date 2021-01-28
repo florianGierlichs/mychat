@@ -30,46 +30,6 @@ const ImageWrapper = styled.div`
 `;
 
 const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
-    // useEffect(() => {
-    //     const test = async () => {
-    //         const signUpResponse = await fetch(`/api/users/signup`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 username: 'relativeURL',
-    //                 password: 'relativeURL',
-    //             }),
-    //         });
-    //         if (signUpResponse.status !== 200) {
-    //             const error = await signUpResponse.json();
-    //             throw new Error(error.message);
-    //         }
-    //     };
-    //     test();
-    // }, []);
-
-    // useEffect(() => {
-    //     const test = async () => {
-    //         const signUpResponse = await fetch(`/api/users/login`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 username: 'relativeURL',
-    //                 password: 'relativeURL',
-    //             }),
-    //         });
-    //         if (signUpResponse.status !== 200) {
-    //             const error = await signUpResponse.json();
-    //             throw new Error(error.message);
-    //         }
-    //     };
-    //     test();
-    // }, []);
-
     return (
         <Layout title="mychat">
             <Headline color="red">Hello Florian </Headline>
