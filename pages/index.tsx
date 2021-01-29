@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { GetStaticProps } from 'next';
-// import { useEffect } from 'react';
 import Layout from '../components/Layout';
 import Image from 'next/image';
 import AuthenticationForm from '../components/AuthenticationForm';
