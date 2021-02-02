@@ -3,6 +3,7 @@ import { ExistingUser } from '../../interfaces';
 import User from '../models/User';
 import { hash, compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import cookie from 'cookie';
 
 const router = express.Router();
 
@@ -60,6 +61,17 @@ router.post('/signup', async (req, res) => {
 
             await newUser.save();
             const jwt = sign({ username }, process.env['SECRET_KEY']!);
+
+            res.setHeader(
+                'Set-Cookie',
+                cookie.serialize('jwt', jwt, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict',
+                    maxAge: 3600,
+                    path: '/',
+                })
+            );
             res.status(200).json({ jwt });
         });
     } catch (error) {
@@ -85,8 +97,19 @@ router.post('/login', async (req, res) => {
             if (!result) {
                 return res.status(401).send({ message: `Username or password is wrong!` });
             }
-            const jwt = sign({ username }, process.env['SECRET_KEY']!);
-            res.status(200).json({ jwt });
+            const jwt = sign({ username }, process.env['SECRET_KEY']!, { expiresIn: '1h' });
+
+            res.setHeader(
+                'Set-Cookie',
+                cookie.serialize('jwt', jwt, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict',
+                    maxAge: 3600,
+                    path: '/',
+                })
+            );
+            res.status(200).json();
         });
     } catch (error) {
         res.status(500).json(error);

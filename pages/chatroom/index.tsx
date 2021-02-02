@@ -4,6 +4,8 @@ import Link from 'next/link';
 import colors from '../../utils/colors';
 import { useEffect, useState } from 'react';
 import { checkLocalStorage } from '../../utils/checkLocalStorage';
+import { GetServerSideProps } from 'next';
+import authenticateJWT from '../../utils/authenticateJWT';
 
 interface StyledComponentProps {
     nameState: boolean;
@@ -63,7 +65,7 @@ const Username = styled.div`
 const Chatroom = (): JSX.Element => {
     const [username, setUsername] = useState('');
     const [nameState, setNameState] = useState(true);
-
+    console.log('client');
     function onInputChange(event: any) {
         setUsername(event.target.value);
     }
@@ -112,6 +114,22 @@ const Chatroom = (): JSX.Element => {
             </Container>
         </Layout>
     );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const jwt = ctx.req.cookies?.jwt;
+    try {
+        authenticateJWT(jwt);
+    } catch (err) {
+        console.log(err);
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+    return { props: {} };
 };
 
 export default Chatroom;

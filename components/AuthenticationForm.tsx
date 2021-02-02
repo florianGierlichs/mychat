@@ -117,7 +117,7 @@ const AuthenticationForm: NextPage = () => {
                 const error = await signUpResponse.json();
                 throw new Error(error.message);
             }
-            // here probably set JWT token
+
             router.push('/chatroom');
         } catch (error) {
             console.log(error.message);
@@ -141,8 +141,7 @@ const AuthenticationForm: NextPage = () => {
                 const error = await signUpResponse.json();
                 throw new Error(error.message);
             }
-            const jwt = await signUpResponse.json();
-            console.log('jwt', jwt);
+
             router.push('/chatroom');
         } catch (error) {
             console.log(error.message);
