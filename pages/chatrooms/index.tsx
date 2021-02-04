@@ -47,20 +47,20 @@ interface PageProps {
     username: string;
 }
 
-const Chatroom = ({ username }: PageProps): JSX.Element => {
+const Chatrooms = ({ username }: PageProps): JSX.Element => {
     return (
         <Layout title="chatroom">
             <Container>
                 <Headline>Choose a room</Headline>
                 <Username>username: {username}</Username>
                 <RoomsContainer>
-                    <Link href="/chatroom/usa">
+                    <Link href="/chatrooms/room/usa">
                         <a>USA</a>
                     </Link>
-                    <Link href="/chatroom/russia">
+                    <Link href="/chatrooms/room/russia">
                         <a>Russia</a>
                     </Link>
-                    <Link href="/chatroom/china">
+                    <Link href="/chatrooms/room/china">
                         <a>China</a>
                     </Link>
                 </RoomsContainer>
@@ -85,4 +85,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
 };
 
-export default Chatroom;
+export default Chatrooms;
