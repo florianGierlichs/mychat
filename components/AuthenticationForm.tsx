@@ -117,8 +117,8 @@ const AuthenticationForm: NextPage = () => {
                 const error = await signUpResponse.json();
                 throw new Error(error.message);
             }
-            // here probably set JWT token
-            router.push('/chatroom');
+
+            router.push('/chatrooms');
         } catch (error) {
             console.log(error.message);
             setError(error.message);
@@ -141,8 +141,8 @@ const AuthenticationForm: NextPage = () => {
                 const error = await signUpResponse.json();
                 throw new Error(error.message);
             }
-            // here probably set JWT token
-            router.push('/chatroom');
+
+            router.push('/chatrooms');
         } catch (error) {
             console.log(error.message);
             setError(error.message);

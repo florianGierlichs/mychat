@@ -2,6 +2,8 @@ import express from 'express';
 import { ExistingUser } from '../../interfaces';
 import User from '../models/User';
 import { hash, compare } from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+import cookie from 'cookie';
 
 const router = express.Router();
 
@@ -44,7 +46,7 @@ router.post('/signup', async (req, res) => {
 
     try {
         const existingUser: ExistingUser | null = await User.findOne({
-            username: username,
+            username,
         });
 
         if (existingUser) {
@@ -53,15 +55,27 @@ router.post('/signup', async (req, res) => {
 
         hash(password, 10, async function (_err, hash: string) {
             const newUser = new User({
-                username: username,
+                username,
                 password: hash,
             });
 
             await newUser.save();
-            res.status(200).send();
+            const jwt = sign({ username }, process.env['SECRET_KEY']!);
+
+            res.setHeader(
+                'Set-Cookie',
+                cookie.serialize('jwt', jwt, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict',
+                    maxAge: 3600,
+                    path: '/',
+                })
+            );
+            res.status(200).json({ jwt });
         });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json(error);
     }
 });
 
@@ -83,11 +97,37 @@ router.post('/login', async (req, res) => {
             if (!result) {
                 return res.status(401).send({ message: `Username or password is wrong!` });
             }
+            const jwt = sign({ username }, process.env['SECRET_KEY']!, { expiresIn: '1h' });
+
+            res.setHeader(
+                'Set-Cookie',
+                cookie.serialize('jwt', jwt, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict',
+                    maxAge: 3600,
+                    path: '/',
+                })
+            );
             res.status(200).json();
         });
     } catch (error) {
         res.status(500).json(error);
     }
+});
+
+router.post('/logout', async (_req, res) => {
+    res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('jwt', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 0,
+            path: '/',
+        })
+    );
+    res.status(200).end();
 });
 
 export default router;

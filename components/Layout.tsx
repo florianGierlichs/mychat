@@ -3,6 +3,16 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Particles from 'react-tsparticles';
 import colors from '../utils/colors';
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+
+const Button = styled.button`
+    padding: 5px 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+`;
 
 type Props = {
     children?: ReactNode;
@@ -11,7 +21,19 @@ type Props = {
 
 const Layout = ({ children, title = 'This is the default title' }: Props): JSX.Element => {
     const [windowWidth, setWindowWidth] = useState(getWindowWidth());
+    const router = useRouter();
     let particleNumber = 4;
+
+    async function handleLogout() {
+        try {
+            await fetch(`/api/users/logout`, {
+                method: 'POST',
+            });
+            router.push('/');
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
     function getWindowWidth(): number | undefined {
         if (typeof window !== 'undefined') {
@@ -34,7 +56,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
     }
 
     return (
-        <div>
+        <>
             <Head>
                 <title>{title}</title>
                 <meta charSet="utf-8" />
@@ -99,13 +121,14 @@ const Layout = ({ children, title = 'This is the default title' }: Props): JSX.E
                         <a>Users List</a>
                     </Link>{' '}
                     |{' '}
-                    <Link href="/chatroom">
-                        <a>chatroom</a>
+                    <Link href="/chatrooms">
+                        <a>chatrooms</a>
                     </Link>
                 </nav>
             </header>
+            <Button onClick={handleLogout}>Logout</Button>
             {children}
-        </div>
+        </>
     );
 };
 

@@ -1,104 +1,41 @@
 import styled from '@emotion/styled';
-import { GetStaticProps } from 'next';
-// import { useEffect } from 'react';
 import Layout from '../components/Layout';
-import Image from 'next/image';
 import AuthenticationForm from '../components/AuthenticationForm';
-
-type Dog = {
-    message: string | undefined;
-};
-
-type Users = {
-    username: string;
-    password: string;
-};
-
-type PageProps = {
-    dog: Dog;
-    users: Users[];
-};
+import { GetServerSideProps } from 'next';
+import authenticateJWT from '../utils/authenticateJWT';
 
 const Headline = styled.h1`
     color: ${(props) => props.color};
 `;
 
-const ImageWrapper = styled.div`
-    max-width: 500px;
-    height: 500px;
-    position: relative;
-`;
+interface PageProps {
+    username: string;
+}
 
-const IndexPage = ({ dog, users }: PageProps): JSX.Element => {
-    // useEffect(() => {
-    //     const test = async () => {
-    //         const signUpResponse = await fetch(`/api/users/signup`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 username: 'relativeURL',
-    //                 password: 'relativeURL',
-    //             }),
-    //         });
-    //         if (signUpResponse.status !== 200) {
-    //             const error = await signUpResponse.json();
-    //             throw new Error(error.message);
-    //         }
-    //     };
-    //     test();
-    // }, []);
-
-    // useEffect(() => {
-    //     const test = async () => {
-    //         const signUpResponse = await fetch(`/api/users/login`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 username: 'relativeURL',
-    //                 password: 'relativeURL',
-    //             }),
-    //         });
-    //         if (signUpResponse.status !== 200) {
-    //             const error = await signUpResponse.json();
-    //             throw new Error(error.message);
-    //         }
-    //     };
-    //     test();
-    // }, []);
-
+const IndexPage = ({ username }: PageProps): JSX.Element => {
     return (
         <Layout title="mychat">
-            <Headline color="red">Hello Florian </Headline>
-            <AuthenticationForm />
-            {dog.message && (
-                <ImageWrapper>
-                    <Image
-                        src={dog.message}
-                        alt="Random picture of a dog"
-                        layout="fill"
-                        objectFit="contain"
-                    />
-                </ImageWrapper>
+            {username ? (
+                <Headline color="red">Hello {username}, welcome to mychat</Headline>
+            ) : (
+                <>
+                    <Headline color="red">Welcome, please login</Headline>
+                    <AuthenticationForm />
+                </>
             )}
-            {users?.map((user) => (
-                <div key={user.username}>{user.username}</div>
-            ))}
         </Layout>
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-    const response = await fetch('http://localhost:3000/api/dog');
-    const dog = await response.json();
-
-    const usersResponse = await fetch('http://localhost:3000/api/users');
-    const users = await usersResponse.json();
-
-    return { props: { dog, users }, revalidate: 1 };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const jwt = ctx.req.cookies?.jwt;
+    try {
+        const { username } = authenticateJWT(jwt);
+        return { props: { username } };
+    } catch (err) {
+        console.log(err);
+        return { props: {} };
+    }
 };
 
 export default IndexPage;

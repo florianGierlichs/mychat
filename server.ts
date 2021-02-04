@@ -22,13 +22,6 @@ const startServer = async () => {
 
     server.use('/api/users', usersRoute);
 
-    server.get('/api/dog', async (_, res: Response) => {
-        const response = await fetch('https://dog.ceo/api/breeds/image/random');
-
-        const data = await response.json();
-        return res.status(200).json(data);
-    });
-
     server.all('*', (req: Request, res: Response) => {
         return handle(req, res);
     });
