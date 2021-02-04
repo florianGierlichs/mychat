@@ -8,11 +8,22 @@ const Headline = styled.h1`
     color: ${(props) => props.color};
 `;
 
-const IndexPage = (): JSX.Element => {
+interface PageProps {
+    username: string;
+}
+
+const IndexPage = ({ username }: PageProps): JSX.Element => {
+    console.log('username', username);
     return (
         <Layout title="mychat">
-            <Headline color="red">Welcome to mychat</Headline>
-            <AuthenticationForm />
+            {username ? (
+                <Headline color="red">Hello {username}, welcome to mychat</Headline>
+            ) : (
+                <>
+                    <Headline color="red">Welcome, please login</Headline>
+                    <AuthenticationForm />
+                </>
+            )}
         </Layout>
     );
 };
@@ -20,12 +31,12 @@ const IndexPage = (): JSX.Element => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const jwt = ctx.req.cookies?.jwt;
     try {
-        authenticateJWT(jwt);
+        const { username } = authenticateJWT(jwt);
+        return { props: { username } };
     } catch (err) {
         console.log(err);
         return { props: {} };
     }
-    return { props: {} };
 };
 
 export default IndexPage;
