@@ -13,7 +13,6 @@ interface PageProps {
 }
 
 const IndexPage = ({ username }: PageProps): JSX.Element => {
-    console.log('username', username);
     return (
         <Layout title="mychat">
             {username ? (

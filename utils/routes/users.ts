@@ -116,4 +116,18 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/logout', async (_req, res) => {
+    res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('jwt', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 0,
+            path: '/',
+        })
+    );
+    res.status(200).end();
+});
+
 export default router;

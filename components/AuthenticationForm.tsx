@@ -118,7 +118,7 @@ const AuthenticationForm: NextPage = () => {
                 throw new Error(error.message);
             }
 
-            router.push('/chatroom');
+            router.push('/chatrooms');
         } catch (error) {
             console.log(error.message);
             setError(error.message);
@@ -142,7 +142,7 @@ const AuthenticationForm: NextPage = () => {
                 throw new Error(error.message);
             }
 
-            router.push('/chatroom');
+            router.push('/chatrooms');
         } catch (error) {
             console.log(error.message);
             setError(error.message);
