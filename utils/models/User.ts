@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ExistingUser } from '../../interfaces';
 
 const UserSchema = new mongoose.Schema(
     {
@@ -14,5 +15,5 @@ const UserSchema = new mongoose.Schema(
     { collection: 'users', minimize: false }
 );
 
-const User = mongoose.model('users', UserSchema);
+const User = mongoose.model<ExistingUser & Document>('users', UserSchema);
 export default User;

@@ -1,3 +1,5 @@
+import { Document } from 'mongoose';
+
 export type User = {
     id: number;
     name: string;
@@ -14,8 +16,8 @@ export type ChatProps = {
     username?: string;
 };
 
-export type ExistingUser = {
+export interface ExistingUser extends Document {
     _id: string;
     username: string;
     password: string;
-};
+}
