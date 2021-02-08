@@ -45,7 +45,9 @@ const socket = (http: Server): void => {
 
             socket.on('disconnect', () => {
                 if (existingRoom?.clientCount) {
-                    existingRoom.clientCount--;
+                    if (existingRoom) {
+                        existingRoom.clientCount--;
+                    }
                     existingRoom.users = existingRoom.users?.filter((user) => user !== username);
                 }
                 io.to(existingRoom!.name).emit('connectCounter', existingRoom);
