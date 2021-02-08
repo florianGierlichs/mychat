@@ -1,41 +1,48 @@
-# TypeScript Next.js example
+# mychat
 
-This is a really simple project that shows the usage of Next.js with TypeScript.
+This is a simple chat application. It provides multiple chatrooms with separate chat histories.
+To enter the chatrooms, you have to signup with a username and password.
 
-## Deploy your own
+This project was initialized with
 
-Deploy the example using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/vercel/next.js/tree/canary/examples/with-typescript)
-
-## How to use it?
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
+```
 npx create-next-app --example with-typescript with-typescript-app
-# or
-yarn create next-app --example with-typescript with-typescript-app
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/import?filter=next.js&utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Checkout other Next.js examples [here](https://github.com/vercel/next.js/tree/canary/examples)
 
-## Notes
+## Tech stack
 
-This example shows how to integrate the TypeScript type system into Next.js. Since TypeScript is supported out of the box with Next.js, all we have to do is to install TypeScript.
+-   [Next.js](https://nextjs.org/)
+-   [TypeScript](https://www.typescriptlang.org/)
+-   [socket.io](https://socket.io/)
+-   [MongoDB](https://www.mongodb.com/)
+-   [JWT](https://jwt.io/)
+-   [bcrypt](https://www.npmjs.com/package/bcrypt)
+
+## Development
+
+Feel free to clone the repo.
+You will need a connection to a database and a secret-key to validate the authorization via JWT. Dont forget to add this credentials in an .env file.
+You also need a node version 14+.
 
 ```
-npm install --save-dev typescript
+npm install
 ```
 
-To enable TypeScript's features, we install the type declarations for React and Node.
+```
+// .env file
+
+DB_CONNECTION=XXX
+DB_NAME=XXX
+SECRET_KEY=XXX
+```
 
 ```
-npm install --save-dev @types/react @types/react-dom @types/node
+// run development server on http://localhost:3000/
+npm run dev
 ```
 
-When we run `next dev` the next time, Next.js will start looking for any `.ts` or `.tsx` files in our project and builds it. It even automatically creates a `tsconfig.json` file for our project with the recommended settings.
+## License
 
-Next.js has built-in TypeScript declarations, so we'll get autocompletion for Next.js' modules straight away.
-
-A `type-check` script is also added to `package.json`, which runs TypeScript's `tsc` CLI in `noEmit` mode to run type-checking separately. You can then include this, for example, in your `test` scripts.
+MIT
