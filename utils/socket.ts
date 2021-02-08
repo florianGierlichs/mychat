@@ -49,7 +49,7 @@ const socket = (http: Server): void => {
                     existingRoom.users = existingRoom.users?.filter((user) => user !== username);
                 }
                 io.to(existingRoom!.name).emit('connectCounter', existingRoom);
-                console.log(`a user disconnected in room ${room.name}`);
+                console.log(`A user disconnected in room ${room.name}`);
                 if (existingRoom?.clientCount === 0) {
                     rooms = rooms.filter((r) => r.name !== existingRoom?.name);
                 }
