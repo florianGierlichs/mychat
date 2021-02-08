@@ -1,4 +1,5 @@
 import { Server } from 'http';
+import * as socketio from 'socket.io';
 import { Room } from '../interfaces';
 import formatMessage from './formatMessage';
 
@@ -13,8 +14,8 @@ type MessageProps = {
 };
 
 const socket = (http: Server): void => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const io = require('socket.io')(http);
+    const io: socketio.Server = new socketio.Server();
+    io.attach(http);
 
     let rooms: Room[] = [];
     io.on('connection', function (socket: any) {
@@ -43,21 +44,26 @@ const socket = (http: Server): void => {
             socket.emit('getChatMessage', formatMessage('Bot', `Welcome to the chat!`));
 
             socket.on('disconnect', () => {
-                if (existingRoom?.clientCount) {
-                    existingRoom.clientCount--;
-                    existingRoom.users = existingRoom.users?.filter((user) => user !== username);
+                if (existingRoom) {
+                    if (existingRoom.clientCount) {
+                        existingRoom.clientCount--;
+
+                        existingRoom.users = existingRoom.users?.filter(
+                            (user) => user !== username
+                        );
+                    }
+                    io.to(existingRoom.name).emit('connectCounter', existingRoom);
+                    console.log(`A user disconnected in room ${room.name}`);
+                    if (existingRoom.clientCount === 0) {
+                        rooms = rooms.filter((r) => r.name !== existingRoom?.name);
+                    }
+                    console.log('rooms', rooms);
                 }
-                io.to(existingRoom?.name).emit('connectCounter', existingRoom);
-                console.log(`a user disconnected in room ${room.name}`);
-                if (existingRoom?.clientCount === 0) {
-                    rooms = rooms.filter((r) => r.name !== existingRoom?.name);
-                }
-                console.log('rooms', rooms);
             });
 
             // chat
             socket.on('chatMessage', ({ username, chatMessage }: MessageProps) => {
-                io.to(existingRoom?.name).emit(
+                io.to(existingRoom!.name).emit(
                     'getChatMessage',
                     formatMessage(username, chatMessage)
                 );
