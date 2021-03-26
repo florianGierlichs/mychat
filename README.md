@@ -3,6 +3,10 @@
 This is a simple chat application. It provides multiple chatrooms with separate chat histories.
 To enter the chatrooms, you have to signup with a username and password.
 
+Feel free to join:
+
+## https://mychat-awesome.herokuapp.com/
+
 This project was initialized with
 
 ```
