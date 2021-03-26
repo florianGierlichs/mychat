@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "dev": "nodemon",
-        "build": "next build",
-        "start": "next start",
+        "build": "next build && tsc --project tsconfig.server.json",
+        "start": "NODE_ENV=production node dist/server.js",
         "type-check": "tsc"
     },
     "dependencies": {
