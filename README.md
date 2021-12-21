@@ -2,8 +2,10 @@
 
 This is a simple chat application. It provides multiple chatrooms with separate chat histories.
 To enter the chatrooms, you have to signup with a username and password.
+Your password get`s hashed and salted multiple times and wont get saved in plaintext. :muscle:
 
 Feel free to join:
+The site may need some time to rebuild, if it`s in sleep mode :sleepy:
 
 ## https://mychat-awesome.herokuapp.com/
 
@@ -50,3 +52,5 @@ npm run dev
 ## License
 
 MIT
+
+## Happy Coding
